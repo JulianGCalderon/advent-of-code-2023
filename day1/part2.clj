@@ -12,6 +12,10 @@
                   "eight" "8"
                   "nine" "9"})
 
+; Traduce un digito en texto a un digito en numero, o devuelve el propio valor
+; en caso de no encontrar traduccion.
+(defn translate [digit] (or (translation digit) digit))
+
 ; Define un patron que utiliza un positive lookahead para hayar un numero.
 ; Esto permite encontrar numeros con solapamiento.
 (def digits-pattern
@@ -23,7 +27,7 @@
 ; en formato texto a formato numero.
 (defn numbers [line]
   (map
-   (fn [[_, digit]] (or (translation digit) digit))
+   (fn [[_, digit]] (translate digit))
    (re-seq digits-pattern line)))
 
 ; Devuelve, como entero, el primer y el ultimo digito de la linea
