@@ -1,4 +1,5 @@
-(require '[clojure.java.io :as io])
+(ns day1.part1
+  (:require [clojure.java.io :as io]))
 
 ; Devuele de forma lazy todos los numeros de una linea
 (defn numbers [line]

@@ -1,5 +1,6 @@
-(require '[clojure.java.io :as io])
-(require '[clojure.string :as string])
+(ns day1.part2
+  (:require [clojure.java.io :as io]
+            [clojure.string :as string]))
 
 ; Define un hashmap con los numeros escritos y su valor numerico.
 (def translation {"one" "1"
