@@ -3,6 +3,7 @@
             [clojure.string :as string]))
 
 (defrecord Game [id rounds])
+(def colors ["red" "green" "blue"])
 
 (defn parse-id [line]
   (Integer. (last (string/split line #" "))))
@@ -26,7 +27,7 @@
 (defn minimum-set [game]
   (reduce
    (partial merge-with max)
-   (zipmap ["red" "green" "blue"] (repeat 0))
+   (zipmap colors (repeat 0))
    (:rounds game)))
 
 (defn power [set]
