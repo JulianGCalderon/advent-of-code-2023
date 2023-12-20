@@ -11,6 +11,11 @@
 
     (Integer. (str n1 n2))))
 
+(defn solve [rdr]
+  (->> (line-seq rdr)
+       (map calibration-values)
+       (reduce +)))
+
 (with-open [rdr (io/reader "day1/input.txt")]
-  (reduce + (map calibration-values (line-seq rdr))))
+  (solve rdr))
 

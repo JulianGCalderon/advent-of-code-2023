@@ -14,23 +14,44 @@
 
 (defn translate [digit] (or (translation digit) digit))
 
-(def digits-pattern
-  (re-pattern (format "(?=(%s|%s))"
-                      #"\d"
-                      (string/join "|" (keys translation)))))
+(def text-digits-pattern
+  (->> (keys translation)
+       (string/join "|")
+       (re-pattern)))
 
-(defn numbers [line]
-  (map
-   (fn [[_, digit]] (translate digit))
-   (re-seq digits-pattern line)))
+(def digits-pattern
+  (->> text-digits-pattern
+       (str #"\d|")
+       (re-pattern)))
+
+(def reverse-digits-pattern
+  (->> text-digits-pattern
+       (str)
+       (string/reverse)
+       (str #"\d|")
+       (re-pattern)))
+
+(defn find-first [line]
+  (translate (re-find digits-pattern line)))
+
+(defn find-last [line]
+  (->> (string/reverse line)
+       (re-find reverse-digits-pattern)
+       (string/reverse)
+       (translate)))
 
 (defn calibration-values [line]
-  (let [nums (numbers line)
-        n1 (first nums)
-        n2 (last nums)]
+  (let [n1 (find-first line)
+        n2 (find-last line)]
 
     (Integer. (str n1 n2))))
 
+(defn solve [rdr]
+  (->> (line-seq rdr)
+       (map calibration-values)
+       (reduce +)))
+
 (with-open [rdr (io/reader "day1/input.txt")]
-  (reduce + (map calibration-values (line-seq rdr))))
+  (solve rdr))
+
 

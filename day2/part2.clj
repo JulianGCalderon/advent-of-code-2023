@@ -1,28 +1,9 @@
 (ns day2.part2
   (:require [clojure.java.io :as io]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [day2.part1 :refer [parse-game]]))
 
-(defrecord Game [id rounds])
 (def colors ["red" "green" "blue"])
-
-(defn parse-id [line]
-  (Integer. (last (string/split line #" "))))
-
-(defn parse-round [line]
-  (into {} (for [reveal (string/split line #", ")]
-             (-> (string/split reveal #" ")
-                 (update-in [0] #(Integer/parseInt %1))
-                 (reverse)
-                 (vec)))))
-
-(defn parse-rounds [line]
-  (map parse-round (string/split line #"; ")))
-
-(defn parse-game [line]
-  (let [[id rounds] (string/split line #": " 2)]
-    (->Game
-     (parse-id id)
-     (parse-rounds rounds))))
 
 (defn minimum-set [game]
   (reduce

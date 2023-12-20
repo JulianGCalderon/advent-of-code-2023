@@ -1,11 +1,12 @@
 (ns day3.part1
   (:require
-   [clojure.java.io :as io]))
+   [clojure.java.io :as io]
+   [clojure.set :refer [difference]]))
 
 (defn neighbours [position]
-  (set (for [i (range -1 2)
-             j (range -1 2)]
-         (map + [i j] position))))
+  (for [i (range -1 2)
+        j (range -1 2)]
+    (map + [i j] position)))
 
 (defn string-find-all [pattern string]
   (let [matcher (re-matcher pattern string)]
@@ -22,12 +23,17 @@
                             (string-find-all pattern line))))
        (flatten)))
 
+(defn symbol-coord [symbol]
+  [(:row symbol) (:start symbol)])
+
 (defn engine-part? [{:keys [start end row _]} symbols]
   (let [indices (for [x (range start end)] [row x])
-        coords  (set (mapcat neighbours indices))]
+        all-coords  (set (mapcat neighbours indices))
+        outer-coords (difference all-coords (set indices))
+        symbol-coords (set (map symbol-coord symbols))]
     (some
-     #(contains? coords %1)
-     (map #(vector (:row %1) (:start %1)) symbols))))
+     (partial contains? symbol-coords)
+     outer-coords)))
 
 (defn solve [input]
   (let [symbols (input-find-all #"[^\d\.]" input)]
