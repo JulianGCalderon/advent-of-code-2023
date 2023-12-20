@@ -33,7 +33,7 @@
 (defn power [set]
   (reduce * (vals set)))
 
-(defn part1 [rdr]
+(defn solve [rdr]
   (->> (line-seq rdr)
        (map parse-game)
        (map minimum-set)
@@ -41,5 +41,5 @@
        (reduce +)))
 
 (with-open [rdr (io/reader "day2/input.txt")]
-  (part1 rdr))
+  (solve rdr))
 

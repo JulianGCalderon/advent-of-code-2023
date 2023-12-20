@@ -31,7 +31,7 @@
 (defn possible [game]
   (every? possible-round (:rounds game)))
 
-(defn part1 [rdr]
+(defn solve [rdr]
   (->> (line-seq rdr)
        (map parse-game)
        (filter possible)
@@ -39,5 +39,5 @@
        (reduce +)))
 
 (with-open [rdr (io/reader "day2/input.txt")]
-  (part1 rdr))
+  (solve rdr))
 

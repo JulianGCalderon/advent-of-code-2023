@@ -1,51 +1,42 @@
 (ns day3.part1
   (:require
-   [clojure.java.io :as io]
-   [clojure.string :as string]
-   [clojure.set :refer [union]]))
+   [clojure.java.io :as io]))
 
-(def sample "467..114..
-...*......
-..35..633.
-......#...
-617*......
-.....+.58.
-..592.....
-......755.
-...$.*....
-.664.598..")
+(defn neighbours [position]
+  (set (for [i (range -1 2)
+             j (range -1 2)]
+         (map + [i j] position))))
 
-(defn symbols [input]
-  (for [[i line] (map-indexed vector (string/split-lines input))
-        [j ch] (map-indexed vector (string/split line #""))
-        :when (re-matches #"[^\d\.]" ch)]
-    [i j]))
-
-(defn expand-symbol [position]
-  (for [i (range -1 2)
-        j (range -1 2)]
-    (map + [i j] position)))
-
-(defn expand-symbols [symbols]
-  (reduce #(union %1 (set (expand-symbol %2))) #{} symbols))
-
-(defn re-seq-pos [pattern string]
+(defn string-find-all [pattern string]
   (let [matcher (re-matcher pattern string)]
-    (loop [matches []]
-      (if (.find matcher)
-        (recur (conj matches
-                     {:start (.start matcher)
-                      :end (.end matcher)
-                      :group (.group matcher)}))
-        matches))))
+    (for [_ (range)
+          :while (.find matcher)]
+      {:start (.start matcher)
+       :end (.end matcher)
+       :group (.group matcher)})))
+
+(defn input-find-all [pattern input]
+  (->> input
+       (map-indexed (fn [row line]
+                      (mapv #(assoc %1 :row row)
+                            (string-find-all pattern line))))
+       (flatten)))
+
+(defn engine-part? [{:keys [start end row _]} symbols]
+  (let [indices (for [x (range start end)] [row x])
+        coords  (set (mapcat neighbours indices))]
+    (some
+     #(contains? coords %1)
+     (map #(vector (:row %1) (:start %1)) symbols))))
 
 (defn solve [input]
-  (let [valid (expand-symbols (symbols input))]
-    (reduce + (for [[i line] (map-indexed vector (string/split-lines input))
-                    number (re-seq-pos #"\d+" line)
-                    :when (some #(contains? valid [i %1]) (range (:start number) (:end number)))]
-                (Integer. (:group number))))))
+  (let [symbols (input-find-all #"[^\d\.]" input)]
+    (->> input
+         (input-find-all #"\d+")
+         (filter #(engine-part? % symbols))
+         (map :group)
+         (map #(Integer/parseInt %))
+         (reduce +))))
 
-(solve sample)
-
-(solve (slurp "day3/input.txt"))
+(with-open [rdr (io/reader "day3/input.txt")]
+  (solve (line-seq rdr)))

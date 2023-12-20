@@ -1,8 +1,5 @@
 # Day 3: Gear Ratios
 
-Este ejercicio fue un suplicio de resolveren programación funcional. Escribí la
-resolución con el unico proposito de terminarla, por lo que no me hago
-responsable por el estado del código final
 
 ## Part 1
 
