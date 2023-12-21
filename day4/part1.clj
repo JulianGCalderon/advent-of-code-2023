@@ -4,24 +4,29 @@
    [clojure.string :as string]
    [clojure.set :refer [intersection]]))
 
-(defn numbers [line]
-  (-> line
-      (string/split #": ")
-      (get 1)
-      (string/split #" \| ")
-      ((partial map #(string/split %1 #"\s+")))
-      ((partial map set))))
+(defn winners [line]
+  (->
+   (->
+    line
+    (string/split #":")
+    (get 1)
+    (string/split #"\|"))
+   (->>
+    (map #(string/trim %1))
+    (map #(string/split %1 #"\s+"))
+    (map set)
+    (apply intersection)
+    (count))))
 
-(defn points [winning]
+(defn points [winners]
   (reduce
    (fn [acc _]
      (if (= acc 0) 1 (* 2 acc)))
    0
-   winning))
+   (range winners)))
 
 (defn solve [input]
-  (->> (map numbers input)
-       (map #(apply intersection %))
+  (->> (map winners input)
        (map points)
        (reduce +)))
 
