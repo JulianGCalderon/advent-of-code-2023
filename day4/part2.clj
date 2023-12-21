@@ -14,7 +14,6 @@
          [cur-stash & _ :as stash] (repeat 0)
          total 0]
     (let [new-total (+ total 1 cur-stash)]
-      (prn cur-winners (take-while (complement zero?) stash) total)
       (if (empty? rem-winners)
         new-total
         (recur rem-winners (push-stash cur-winners stash) new-total)))))
