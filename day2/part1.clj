@@ -38,6 +38,9 @@
        (map :id)
        (reduce +)))
 
+(with-open [rdr (io/reader "day2/sample1.txt")]
+  (solve rdr))
+
 (with-open [rdr (io/reader "day2/input.txt")]
   (solve rdr))
 

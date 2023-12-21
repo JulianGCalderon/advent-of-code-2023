@@ -44,5 +44,8 @@
          (map #(Integer/parseInt %))
          (reduce +))))
 
+(with-open [rdr (io/reader "day3/sample1.txt")]
+  (solve (line-seq rdr)))
+
 (with-open [rdr (io/reader "day3/input.txt")]
   (solve (line-seq rdr)))

@@ -24,5 +24,8 @@
          (map (partial gear-score numbers))
          (reduce +))))
 
+(with-open [rdr (io/reader "day3/sample2.txt")]
+  (solve (line-seq rdr)))
+
 (with-open [rdr (io/reader "day3/input.txt")]
   (solve (line-seq rdr)))

@@ -21,6 +21,9 @@
        (map power)
        (reduce +)))
 
+(with-open [rdr (io/reader "day2/sample2.txt")]
+  (solve rdr))
+
 (with-open [rdr (io/reader "day2/input.txt")]
   (solve rdr))
 

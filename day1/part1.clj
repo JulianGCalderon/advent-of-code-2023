@@ -16,6 +16,9 @@
        (map calibration-values)
        (reduce +)))
 
+(with-open [rdr (io/reader "day1/sample1.txt")]
+  (solve rdr))
+
 (with-open [rdr (io/reader "day1/input.txt")]
   (solve rdr))
 
